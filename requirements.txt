@@ -5,3 +5,11 @@ python-dotenv
 google-genai
 chromadb
 sentence-transformers
+pypdf
+python-docx
+unstructured
+aiosqlite
+loguru
+tqdm
+pytest
+python-multipart
