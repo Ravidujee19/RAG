@@ -15,8 +15,8 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            "http://127.0.0.1:8001",
-            "http://localhost:8001",
+            "http://127.0.0.1:8000", # for local development
+            "http://localhost:8000",
         ],
         allow_credentials=True,
         allow_methods=["*"],
@@ -24,8 +24,13 @@ def create_app() -> FastAPI:
     )
     app.include_router(v1_router, prefix="/api/v1")
 
-    frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend-react", "dist")
-    if os.path.isdir(frontend_dir):
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    candidates = [
+        os.path.join(root_dir, "frontend", "dist"),
+    ]
+    frontend_dir = next((path for path in candidates if os.path.isdir(path)), None)
+
+    if frontend_dir:
         assets_dir = os.path.join(frontend_dir, "assets")
         if os.path.isdir(assets_dir):
             app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
